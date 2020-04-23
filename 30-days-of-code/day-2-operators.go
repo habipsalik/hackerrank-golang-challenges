@@ -46,7 +46,6 @@ func readLine(reader *bufio.Reader) string {
 
 func checkError(err error) {
 	if err != nil {
-		fmt.Println(err.Error())
-		os.Exit(1)
+		panic(err)
 	}
 }
