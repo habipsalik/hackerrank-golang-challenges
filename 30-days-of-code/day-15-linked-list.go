@@ -1,60 +1,46 @@
 package main
 
 import (
-	"bufio"
 	"fmt"
-	"os"
-	"strconv"
 )
 
 type Node struct {
-	num  int
+	data int
 	next *Node
 }
 
-type List struct {
-	length int
-	start  *Node
-}
-
 func main() {
-	items := new(List)
-	scanner := bufio.NewScanner(os.Stdin)
-	scanner.Scan()
-	_ = scanner.Text() //  This input of test cases. The input not used.
 
-	for scanner.Scan() {
-		if scanner.Text() == "" {
-			break
-		}
-		val, err := strconv.Atoi(scanner.Text())
+	var t, data int
+	var node *Node
+
+	_, err := fmt.Scan(&t)
+	checkError(err)
+
+	for i := 0; i < t; i++ {
+		_, err = fmt.Scan(&data)
 		checkError(err)
-		node := Node{num: val}
-		items.insertNode(&node)
+		node = insertNode(node, data)
 	}
-	items.display()
+
+	display(node)
 }
 
-func (l *List) display() {
-	list := l.start
-	for list != nil {
-		fmt.Printf("%v ", list.num)
-		list = list.next
+func display(node *Node) {
+	for node != nil {
+		fmt.Printf("%v ", node.data)
+		node = node.next
 	}
 }
 
-func (l *List) insertNode(newNode *Node) {
-	if l.length == 0 {
-		l.start = newNode
+func insertNode(node *Node, newData int) *Node {
+	if node == nil {
+		node = &Node{data: newData}
 	} else {
-		currentNode := l.start
-		for currentNode.next != nil {
-			currentNode = currentNode.next
-		}
-		currentNode.next = newNode
+		node.next = insertNode(node.next, newData)
 	}
 
-	l.length++
+	return node
 }
 
 func checkError(err error) {
